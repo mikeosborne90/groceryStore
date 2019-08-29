@@ -1,11 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap');
 
 :root {
-    --main_font: 'Roboto',
-        sans-serif;
-    --heading_font: 'Pacifico',
-        cursive;
+    --main_font: 'Roboto', sans-serif;
+    --heading_font: 'Pacifico', cursive;
+}
 
+body {
+    background-color: #70DA40;
+    font-family: var(--main_font);
+}
+
+h1 {
+    color: #55C225;
+    font-family: var(--heading_font);
+}
+
+ul, li {
+    list-style: none;
+}
+
+main {
+    background-color: #fff;
 }
 
 #iconsCredit {
@@ -13,3 +28,12 @@
     font-style: italic;
     text-align: center;
 }
+
+.myPoint
+{
+    font-size: 5em;
+    color: red;
+}
+
+
+
