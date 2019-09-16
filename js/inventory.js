@@ -104,7 +104,7 @@ const papaya = addProduce(true, '../img/048-papaya.png', 'Papaya', 1.99, '', 10)
 const asparagus = addProduce(true, '../img/049-asparagus.png', 'Asparagus', 2.90, 25, 5);
 const pineapple = addProduce(true, '../img/050-pineapple.png', 'Pineapple', 1.99, '', 10);
 //Throw all my produce into an array for a list
-const inventoryList = [cherry, bamboo, peanut, pitaya, onion, tomato, durian, lettuce, broccoli, corn, breastMilkFruit, blueberry, potato, mango, bellPepper, avocado, strawberry, peas, kiwi, grape, parsley, cucumber, ginger, springOnion, pomegranate, banana, watermelon, artichoke, carrot, roseApple, rambutan, salad, peach, olive, mangosteen, radish, mushroom, chili, lemon, apple, cabbage, orange, tamarind, coconut, eggplant, pumpkin, acorn, papaya, asparagus, pineapple];
+let inventoryList = [cherry, bamboo, peanut, pitaya, onion, tomato, durian, lettuce, broccoli, corn, breastMilkFruit, blueberry, potato, mango, bellPepper, avocado, strawberry, peas, kiwi, grape, parsley, cucumber, ginger, springOnion, pomegranate, banana, watermelon, artichoke, carrot, roseApple, rambutan, salad, peach, olive, mangosteen, radish, mushroom, chili, lemon, apple, cabbage, orange, tamarind, coconut, eggplant, pumpkin, acorn, papaya, asparagus, pineapple];
 
 // Make two methods, one responsible of making an element- REF: makeElement(), the other to create multiple attributes at my will - REF: makeAttributes()
 function makeElement(element, elementId, elementClass, text) {
@@ -172,6 +172,7 @@ const addInventoryToDOM = function (list) {
         container.appendChild(makeProduceCard(list[$i]));
     }
 }
+
 //Remember that array full of the produce I, you created? Well, now it serves here to loop through and append to the container. Done.
 addInventoryToDOM(inventoryList);
 
@@ -199,13 +200,13 @@ function createInput(typeValue, nameValue, placeholderValue, classValue, idValue
 }
 
 //receives array of labels and array of inputs
-function createForm(name, method, action, labels, inputs)
+function createForm(name, method,labels, inputs)
 {
     const form = document.createElement("form");
 
     form.name = name;
     form.method = method;
-    form.action = action;
+    // form.action = action;
 
     if(labels.length == inputs.length) // equal # of labels and inputs
     {
@@ -224,6 +225,7 @@ function createForm(name, method, action, labels, inputs)
     button.className = "btn-primary btn";
     button.type = "submit";
     button.innerText = "Submit";
+    button.id = "submitButton";
 
     form.appendChild(button);
 
@@ -233,27 +235,61 @@ function createForm(name, method, action, labels, inputs)
 //----------------Add labels and inputs to Arrays-------------------
 
 let myLabels = [];
-let label1 = createLabel("email", "Email");
-let label2 = createLabel("subject", "Subject");
-let label3 = createLabel("message", "Message");
+let label1 = createLabel("text", "Produce Name");
+let label2 = createLabel("text", "Organic?");
+let label3 = createLabel("text", "Price");
+let label4 = createLabel("text", "Quantity");
 
 myLabels.push(label1);
 myLabels.push(label2);
 myLabels.push(label3);
+myLabels.push(label4);
 
 let myInputs = [];
-let input1 = createInput("email", "email", "Enter Email Here","form-control", "email");
-let input2 = createInput("text", "subject", "Enter Subject Here","form-control", "subject");
-let input3 = createInput("text", "message", "Enter Message Here","form-control", "message");
+let input1 = createInput("text", "name", "Enter Produce Name Here","form-control", "produceName");
+let input2 = createInput("checkbox", "organic", "Is Organic?","form-control", "isOrganic");
+let input3 = createInput("text", "price", "Enter Price Here","form-control", "price");
+let input4 = createInput("text", "quantity", "Enter Quantity Here","form-control", "quantity");
 
 myInputs.push(input1);
 myInputs.push(input2);
 myInputs.push(input3);
+myInputs.push(input4);
 
 //----------Call createForm Function and attach to div.content-------------
 
-let myForm = createForm("basicForm", "GET", "js/form-submission.js", myLabels, myInputs);
+let myForm = createForm("basicForm", "GET", myLabels, myInputs);
+//"js/form-submission.js"
+myForm.id = "produceForm";
 
 const inventoryForm = document.getElementById("inventoryForm");
-
 inventoryForm.appendChild(myForm);
+
+function pullFormValuesMakeProduce()
+{
+    let produceName = myForm.elements[0].value;
+    let isOrganic = false;
+    let price = parseFloat(myForm.elements[2].value);
+    let qty = parseInt(myForm.elements[3].value);
+
+    if(myForm.elements[1] == "on")
+    {
+        isOrganic = true;
+    }
+
+    let newProduce = addProduce(isOrganic,'',produceName,price,'',qty);
+    inventoryList.push(newProduce);
+
+    let newProduceCard = makeProduceCard(newProduce);
+
+    const container = document.getElementById('inventoryList');
+
+    container.appendChild(newProduceCard);
+}
+
+inventoryForm.addEventListener("submit", (e) =>
+{
+    e.preventDefault();
+    pullFormValuesMakeProduce();
+    alert("New Produce Added!");
+});
