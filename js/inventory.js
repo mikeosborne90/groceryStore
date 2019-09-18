@@ -338,6 +338,7 @@ function pullFormValuesMakeProduce()
     const container = document.getElementById('inventoryList');
 
     container.appendChild(newProduceCard);
+    produceCount++;
 } 
 
 inventoryForm.addEventListener("submit", (e) =>
@@ -352,6 +353,7 @@ inventoryForm.addEventListener("submit", (e) =>
 addToCartBtn.addEventListener("click", () =>
 {   
     let tempCheckBox;
+    shoppingCart = [];
 
     for(i = 0; i < produceCount; i++)
     {
@@ -364,6 +366,7 @@ addToCartBtn.addEventListener("click", () =>
         }
     }
 
+    localStorage.removeItem("cart"); //refresh list
     localStorage.setItem("cart", JSON.stringify(shoppingCart));
 
     alert("Produce Added To Shopping Cart!");

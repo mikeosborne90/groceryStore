@@ -1,0 +1,6 @@
+#shoppingCart {
+    max-height: 60vh;
+    background-color: #fff;
+    overflow: scroll;
+    padding: 0.4em;
+}
