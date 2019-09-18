@@ -8,7 +8,10 @@
 
 * [] - CLASS WILL DO: Create Form function that will append to HTML to create the inventory that way(commented out the HTML in the index to help give you an idea)
 * [] - CLASS WILL DO: Create an alert that they succesfully stored that info into the inventory
-*/  
+*/
+
+var produceCount = 0;
+var shoppingCart = [];
 
 //hardcode inventory list. I will provide three for you, add the rest
 const inventorySchema = [
@@ -146,6 +149,9 @@ function makeProduceCard(produce) {
 
     const box = makeElement('div', '', 'col-md-8 col-md-offset-2 text-center box', '');
     const wrapper = makeElement('div', '', 'row', '');
+    const checkbox = makeElement('input',`selectedProduce${produceCount}`,'',produce.produce);
+    checkbox.type = "checkbox";
+    produceCount++;
     const li = makeElement('li', `produceItem${produce.produce}`, '', '');
     const image = makeElement('img', `${produce.produce.toLowerCase()}`, 'img-responsive col-md-5', '');
     makeAttributes(image, ['src', `${produce.image}`], ['alt', `An image of a ${produce.produce}`]);
@@ -160,6 +166,7 @@ function makeProduceCard(produce) {
     }
     
     wrapper.append(image, produceName, price, discountPrice, savings);
+    li.append(checkbox);
     li.append(wrapper);
     box.appendChild(li);
     return box;
@@ -239,22 +246,26 @@ let label1 = createLabel("text", "Produce Name");
 let label2 = createLabel("text", "Organic?");
 let label3 = createLabel("text", "Price");
 let label4 = createLabel("text", "Quantity");
+let label5 = createLabel("text", "Picture URL");
 
 myLabels.push(label1);
 myLabels.push(label2);
 myLabels.push(label3);
 myLabels.push(label4);
+myLabels.push(label5);
 
 let myInputs = [];
 let input1 = createInput("text", "name", "Enter Produce Name Here","form-control", "produceName");
 let input2 = createInput("checkbox", "organic", "Is Organic?","form-control", "isOrganic");
 let input3 = createInput("text", "price", "Enter Price Here","form-control", "price");
 let input4 = createInput("text", "quantity", "Enter Quantity Here","form-control", "quantity");
+let input5 = createInput("text", "picture", "Enter Image URL Here","form-control", "picture");
 
 myInputs.push(input1);
 myInputs.push(input2);
 myInputs.push(input3);
 myInputs.push(input4);
+myInputs.push(input5);
 
 //----------Call createForm Function and attach to div.content-------------
 
@@ -265,19 +276,51 @@ myForm.id = "produceForm";
 const inventoryForm = document.getElementById("inventoryForm");
 inventoryForm.appendChild(myForm);
 
+function validateForm() {
+    let x = document.forms["produceForm"]["produceName"].value;
+    let y = document.forms["produceForm"]["price"].value;
+    var z = document.forms["produceForm"]["quantity"].value;
+    var a = document.forms["produceForm"]["picture"].value;
+
+    if (x == "") {
+      alert("Produce Name must be filled out!");
+      return false;
+    }
+    else if(y == "")
+    {
+        alert("Price must be filled out!");
+        return false;
+    }
+    else if(z == "")
+    {
+        alert("Quantity must be filled out!");
+        return false;
+    }
+    else if(a == "")
+    {
+        alert("Image URL must be filled out!");
+        return false;
+    }
+    else{
+        pullFormValuesMakeProduce();
+        return true;
+    }
+  }
+
 function pullFormValuesMakeProduce()
 {
     let produceName = myForm.elements[0].value;
     let isOrganic = false;
     let price = parseFloat(myForm.elements[2].value);
     let qty = parseInt(myForm.elements[3].value);
+    let pictureURL = myForm.elements[4].value;
 
     if(myForm.elements[1] == "on")
     {
         isOrganic = true;
     }
 
-    let newProduce = addProduce(isOrganic,'',produceName,price,'',qty);
+    let newProduce = addProduce(isOrganic,pictureURL,produceName,price,'',qty);
     inventoryList.push(newProduce);
 
     let newProduceCard = makeProduceCard(newProduce);
@@ -285,11 +328,24 @@ function pullFormValuesMakeProduce()
     const container = document.getElementById('inventoryList');
 
     container.appendChild(newProduceCard);
-}
+} 
 
 inventoryForm.addEventListener("submit", (e) =>
 {
     e.preventDefault();
-    pullFormValuesMakeProduce();
-    alert("New Produce Added!");
+    if(validateForm())
+    {
+        alert("New Produce Added!");
+    }
+});
+
+addToCartBtn.addEventListener("click", () =>
+{   
+    for(i = 0; i < produceCount; i++)
+    {
+
+    }
+
+    alert("Produce Added To Shopping Cart!");
+
 });
