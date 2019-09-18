@@ -277,26 +277,36 @@ const inventoryForm = document.getElementById("inventoryForm");
 inventoryForm.appendChild(myForm);
 
 function validateForm() {
-    let x = document.forms["produceForm"]["produceName"].value;
-    let y = document.forms["produceForm"]["price"].value;
-    var z = document.forms["produceForm"]["quantity"].value;
-    var a = document.forms["produceForm"]["picture"].value;
+    let nameField = document.forms["produceForm"]["produceName"].value;
+    let priceField = document.forms["produceForm"]["price"].value;
+    var qtyField = document.forms["produceForm"]["quantity"].value;
+    var urlField = document.forms["produceForm"]["picture"].value;
 
-    if (x == "") {
+    if (nameField == "") {
       alert("Produce Name must be filled out!");
       return false;
     }
-    else if(y == "")
+    else if(priceField == "")
     {
         alert("Price must be filled out!");
         return false;
     }
-    else if(z == "")
+    else if(isNaN(priceField))
+    {
+        alert("Price must be a number!");
+        return false;
+    }
+    else if(qtyField == "")
     {
         alert("Quantity must be filled out!");
         return false;
     }
-    else if(a == "")
+    else if(isNaN(qtyField))
+    {
+        alert("Quantity must be a number!");
+        return false;
+    }
+    else if(urlField == "")
     {
         alert("Image URL must be filled out!");
         return false;
@@ -341,10 +351,20 @@ inventoryForm.addEventListener("submit", (e) =>
 
 addToCartBtn.addEventListener("click", () =>
 {   
+    let tempCheckBox;
+
     for(i = 0; i < produceCount; i++)
     {
+        tempCheckBox = document.getElementById(`selectedProduce${i}`);
 
+        if(tempCheckBox.checked)
+        {
+            shoppingCart.push(inventoryList[i]);
+            console.log(`Produce Item${i} is checked!`);
+        }
     }
+
+    localStorage.setItem("cart", JSON.stringify(shoppingCart));
 
     alert("Produce Added To Shopping Cart!");
 
